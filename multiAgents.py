@@ -139,8 +139,6 @@ class MinimaxAgent(MultiAgentSearchAgent):
 
         #util.raiseNotDefined()
     
-    
-
     def maxValue(self, gameState, agentIndex, depth):
         actions = gameState.getLegalActions(agentIndex)
         minimaxValuesAndActions = [] # used to store the minimax value of each action and the action itself
@@ -152,9 +150,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
 
         bestValueAndAction = max(minimaxValuesAndActions)
         return bestValueAndAction
-       
-
-        
+          
     def minValue(self, gameState, agentIndex, depth):
         actions = gameState.getLegalActions(agentIndex)
         minimaxValuesAndActions = [] # used to store the minimax value of each action and the action itself
@@ -167,7 +163,6 @@ class MinimaxAgent(MultiAgentSearchAgent):
         bestValueAndAction = min(minimaxValuesAndActions)
         return bestValueAndAction
     
-
     def minimax(self, gameState, agentIndex, depth):
         # base case
         if gameState.isWin() or gameState.isLose() or depth == 0:
@@ -202,8 +197,6 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
         return self.expectimax(gameState, 0, self.depth)[1]
 
         #util.raiseNotDefined()
-    
-    
 
     def maxValue(self, gameState, agentIndex, depth):
         actions = gameState.getLegalActions(agentIndex)
@@ -232,7 +225,6 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
         averageValue = totalValues / len(expectimaxValuesAndActions)
         return [averageValue, None]
     
-
     def expectimax(self, gameState, agentIndex, depth):
         # base case
         if gameState.isWin() or gameState.isLose() or depth == 0:
@@ -248,4 +240,3 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
             return self.maxValue(gameState, agentIndex, depth)
         else: # if ghost (chance player)
             return self.chanceValue(gameState, agentIndex, depth)
-
