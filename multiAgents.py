@@ -133,8 +133,56 @@ class MinimaxAgent(MultiAgentSearchAgent):
         Returns whether or not the game state is a losing state
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
 
+        # minimax() returns value and best action as a list, so we return the action only (index 1)
+        return self.minimax(gameState, 0, self.depth)[1]
+
+        #util.raiseNotDefined()
+    
+    
+
+    def maxValue(self, gameState, agentIndex, depth):
+        actions = gameState.getLegalActions(agentIndex)
+        minimaxValuesAndActions = [] # used to store the minimax value of each action and the action itself
+
+        for action in actions:
+            successor = gameState.generateSuccessor(agentIndex, action)
+            # minimax() returns value and best action as a list, so we append the value (index 0), as well as the action
+            minimaxValuesAndActions.append([self.minimax(successor, agentIndex + 1, depth)[0], action])
+
+        bestValueAndAction = max(minimaxValuesAndActions)
+        return bestValueAndAction
+       
+
+        
+    def minValue(self, gameState, agentIndex, depth):
+        actions = gameState.getLegalActions(agentIndex)
+        minimaxValuesAndActions = [] # used to store the minimax value of each action and the action itself
+
+        for action in actions:
+            successor = gameState.generateSuccessor(agentIndex, action)
+            # minimax() returns value and best action as a list, so we append the value (index 0), as well as the action
+            minimaxValuesAndActions.append([self.minimax(successor, agentIndex + 1, depth)[0], action])
+
+        bestValueAndAction = min(minimaxValuesAndActions)
+        return bestValueAndAction
+    
+
+    def minimax(self, gameState, agentIndex, depth):
+        # base case
+        if gameState.isWin() or gameState.isLose() or depth == 0:
+            return [self.evaluationFunction(gameState), "Stop"]
+        
+        numAgents = gameState.getNumAgents()
+        agentIndex %= numAgents # required since index is continuously incremented, so must cycle back
+
+        if agentIndex == numAgents - 1: # if last player (end of round), then decrement depth
+            depth -= 1
+
+        if agentIndex == 0: # if pacman (max player)
+            return self.maxValue(gameState, agentIndex, depth)
+        else: # if ghost (min player)
+            return self.minValue(gameState, agentIndex, depth)
 
 class ExpectimaxAgent(MultiAgentSearchAgent):
     """
@@ -149,5 +197,55 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
         legal moves.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+
+        # expectimax() returns value and best action as a list, so we return the action only (index 1)
+        return self.expectimax(gameState, 0, self.depth)[1]
+
+        #util.raiseNotDefined()
+    
+    
+
+    def maxValue(self, gameState, agentIndex, depth):
+        actions = gameState.getLegalActions(agentIndex)
+        expectimaxValuesAndActions = [] # used to store the expectimax value of each action and the action itself
+
+        for action in actions:
+            successor = gameState.generateSuccessor(agentIndex, action)
+            # expectimax() returns value and best action as a list, so we append the value (index 0), as well as the action
+            expectimaxValuesAndActions.append([self.expectimax(successor, agentIndex + 1, depth)[0], action])
+
+        bestValueAndAction = max(expectimaxValuesAndActions)
+        return bestValueAndAction
+        
+    def chanceValue(self, gameState, agentIndex, depth):
+        actions = gameState.getLegalActions(agentIndex)
+        expectimaxValuesAndActions = [] # used to store the expectimax value of each action and the action itself
+
+        for action in actions:
+            successor = gameState.generateSuccessor(agentIndex, action)
+            # expectimax() returns value and best action as a list, so we append the value (index 0), as well as the action
+            expectimaxValuesAndActions.append([self.expectimax(successor, agentIndex + 1, depth)[0], action])
+
+        totalValues = 0
+        for item in expectimaxValuesAndActions:
+            totalValues += item[0]
+        averageValue = totalValues / len(expectimaxValuesAndActions)
+        return [averageValue, None]
+    
+
+    def expectimax(self, gameState, agentIndex, depth):
+        # base case
+        if gameState.isWin() or gameState.isLose() or depth == 0:
+            return [self.evaluationFunction(gameState), "Stop"]
+        
+        numAgents = gameState.getNumAgents()
+        agentIndex %= numAgents # required since index is continuously incremented, so must cycle back
+
+        if agentIndex == numAgents - 1: # if last player (end of round), then decrement depth
+            depth -= 1
+
+        if agentIndex == 0: # if pacman (max player)
+            return self.maxValue(gameState, agentIndex, depth)
+        else: # if ghost (chance player)
+            return self.chanceValue(gameState, agentIndex, depth)
 
