@@ -223,7 +223,7 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
         for item in expectimaxValuesAndActions:
             totalValues += item[0]
         averageValue = totalValues / len(expectimaxValuesAndActions)
-        return [averageValue, None]
+        return [averageValue, None] # action is None since no specific successor/action chosen when taking avg of all
     
     def expectimax(self, gameState, agentIndex, depth):
         # base case
